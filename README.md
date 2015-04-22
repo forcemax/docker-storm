@@ -23,7 +23,7 @@ The image contains an **ENTRYPOINT** for running one container per storm daemon 
   
 ```docker run [OPTIONS] --link zookeeper:zk -d forcemax/docker-storm --daemon (nimbus, drpc, supevisor, ui, logviewer)```  
 
-For instance to run Nimbus :
+For instance to run Nimbus or supervisor or ui:
 
 ```
 ## run storm nimbus (same machine with zookeeper)
@@ -38,15 +38,15 @@ docker run --name=storm-supervisor -h supervisor \
            --expose 6700 --expose 6701 --expose 6702 --expose 6703 --expose 8000 \
            -p 6700:6700 -p 6701:6701 -p 6702:6702 -p 6703:6703 -p 8000:8000 \
            --link storm-nimbus:nimbus --link zookeeper:zk \
-           -d fhuz/docker-storm --daemon supervisor logviewer
+           -d forcemax/docker-storm --daemon supervisor logviewer
 
 ## run storm ui (same machine with zookeeper)
-docker run --name storm-ui \
+docker run --name storm-ui -h ui \
            --expose 8080 \
            -p 8080:8080 \
            --link storm-nimbus:nimbus \
            --link zookeeper:zk \
-           -d fhuz/docker-storm --daemon ui
+           -d forcemax/docker-storm --daemon ui
 ```
 Docker Compose
 ---
@@ -68,9 +68,9 @@ Docker Compose
 
 Makefiles
 ---------
-Or you can checkout this minimal **[Makefile](https://github.com/fhussonnois/docker-storm/blob/master/Makefile)** for directly building and deploying storm.
+Or you can checkout this minimal **[Makefile](https://github.com/forcemax/docker-storm/blob/master/Makefile)** for directly building and deploying storm.
 
-To rebuild the **fhuz/docker-storm** image just run :
+To rebuild the **forcemax/docker-storm** image just run :
 
   - ```make storm-build```
 
@@ -82,10 +82,11 @@ Run the following commands to deploy/destroy your cluster.
 
 How to submit a topology 
 ------------------------
-Without storm installed on your machine:
+Without storm installed on your machine (same machine with nimbus):
 
 ```
-docker run --rm -v <HOST_TOPOLOGY_TARGET_DIR>:/home/storm/jar forcemax/docker-storm \
+docker run --rm -v <HOST_TOPOLOGY_TARGET_DIR>:/home/storm/jar \
+       forcemax/docker-storm \
        -c nimbus.host=`docker inspect --format='{{.NetworkSettings.IPAddress}}' storm-nimbus` \
        jar /home/storm/jar/<TOPOLOGY_JAR> <TOPOLOGY_ARGS>
 
