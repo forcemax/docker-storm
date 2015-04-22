@@ -5,6 +5,7 @@
 # use the ubuntu base image provided by dotCloud
 FROM ubuntu:latest
 MAINTAINER Florian HUSSONNOIS, florian.hussonnois_gmail.com
+MAINTAINER Jae-cheol Kim <forcemax@gmail.com>
 
 RUN apt-get update
 RUN apt-get upgrade -y
