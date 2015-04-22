@@ -3,33 +3,50 @@ docker-storm
 A Dockerfile for deploying a [Storm](http://storm.apache.org/) cluster under [supervision](http://supervisord.org/) using [Docker](https://www.docker.io/)
  containers. 
 
-The image is registered to the [Docker Index](https://index.docker.io/u/fhuz/docker-storm/)
+The image is registered to the [Docker Index](https://index.docker.io/u/forcemax/docker-storm/)
+
+This repository is forked from [https://github.com/fhussonnois/docker-storm](https://github.com/fhussonnois/docker-storm)
 
 Installation
 ------------
 1. Install [Docker](https://www.docker.io/)
-2. Pull the Docker image : ```docker pull fhuz/docker-storm```
+2. Pull the Docker image : ```docker pull forcemax/docker-storm```
 
 Usage
 -----
 **Pre-Requisites:** You must have a running zookeeper instance in order to start any of the storm daemons. 
 ```
-docker run -p 2181:2181 -p 2888:2888 -p 3888:3888 -h zookeeper –-name="zookeeper" -d jplock/zookeeper;
+docker run -p 2181:2181 -p 2888:2888 -p 3888:3888 -h zookeeper –-name="zookeeper" -d jplock/zookeeper
 ```
 
 The image contains an **ENTRYPOINT** for running one container per storm daemon as follow:
   
-```docker run [OPTIONS] --link zookeeper:zk -d fhuz/docker-storm --daemon (nimbus, drpc, supevisor, ui, logviewer)```  
+```docker run [OPTIONS] --link zookeeper:zk -d forcemax/docker-storm --daemon (nimbus, drpc, supevisor, ui, logviewer)```  
 
 For instance to run Nimbus :
 
 ```
-docker run \  
-      --name="storm-nimbus" -h nimbus \  
-      --expose 6627 --expose 3772 --expose 3773 \  
-      --link zookeeper:zk \  
-      -d fhuz/docker-storm \  
-      --daemon nimbus
+## run storm nimbus (same machine with zookeeper)
+docker run --name=storm-nimbus -h nimbus \
+           --expose 6627 --expose 3772 --expose 3773 \
+           -p 6627:6627 -p 3772:3772 -p 3773:3773 \
+           --link zookeeper:zk \
+           -d forcemax/docker-storm --daemon nimbus
+           
+## run storm supervisor (same machine with zookeeper)
+docker run --name=storm-supervisor -h supervisor \
+           --expose 6700 --expose 6701 --expose 6702 --expose 6703 --expose 8000 \
+           -p 6700:6700 -p 6701:6701 -p 6702:6702 -p 6703:6703 -p 8000:8000 \
+           --link storm-nimbus:nimbus --link zookeeper:zk \
+           -d fhuz/docker-storm --daemon supervisor logviewer
+
+## run storm ui (same machine with zookeeper)
+docker run --name storm-ui \
+           --expose 8080 \
+           -p 8080:8080 \
+           --link storm-nimbus:nimbus \
+           --link zookeeper:zk \
+           -d fhuz/docker-storm --daemon ui
 ```
 Docker Compose
 ---
@@ -68,9 +85,11 @@ How to submit a topology
 Without storm installed on your machine:
 
 ```
-docker run --rm --entrypoint storm  \  
-       -v <HOST_TOPOLOGY_TARGET_DIR>:/home/storm fhuz/docker-storm \   
-       -c nimbus.host=`docker inspect --format='{{.NetworkSettings.IPAddress}}' storm-nimbus` jar <TOPOLOGY_JAR> <TOPOLOGY_ARGS>
+docker run --rm -v <HOST_TOPOLOGY_TARGET_DIR>:/home/storm/jar forcemax/docker-storm \
+       -c nimbus.host=`docker inspect --format='{{.NetworkSettings.IPAddress}}' storm-nimbus` \
+       jar /home/storm/jar/<TOPOLOGY_JAR> <TOPOLOGY_ARGS>
+
+
 ```
 
 Port binding 
