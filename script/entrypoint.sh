@@ -2,7 +2,7 @@
 
 set -e
 
-usage="Usage: startup.sh [--daemon (nimbus|drpc|supervisor|ui|logviewer]"
+usage="Usage: startup.sh [--daemon (nimbus|drpc|supervisor|ui|logviewer] [-c nimbus.host .. (kill|jar|..)]"
 
 if [ $# -lt 1 ]; then
  echo $usage >&2;
@@ -30,6 +30,8 @@ case $1 in
           create_supervisor_conf $daemon
         done
     ;;
+    -c)
+    ;; 
     *)
         echo $usage
         exit 1;
@@ -64,6 +66,10 @@ sed -i s/%zookeeper%/$ZOOKEEPER_ADDR/g $STORM_HOME/conf/storm.yaml
 sed -i s/%nimbus%/$NIMBUS_ADDR/g $STORM_HOME/conf/storm.yaml
 sed -i s/%ui_port%/$UI_PORT/g $STORM_HOME/conf/storm.yaml
 
-supervisord
+if [ x"$1" = x"-c" ]; then
+  storm $*
+else
+  supervisord
+fi
 
 exit 0;
