@@ -18,7 +18,6 @@ RUN apt-get update
 # Accept the Oracle license before the installation
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections 
 RUN apt-get install -y oracle-java8-installer
-RUN apt-get update
 
 # Tells Supervisor to run interactively rather than daemonize
 RUN apt-get install -y supervisor wget tar 
@@ -46,6 +45,7 @@ ADD script/entrypoint.sh /home/storm/entrypoint.sh
 ADD supervisor/storm-daemon.conf /home/storm/storm-daemon.conf
 
 RUN chown -R storm:storm $STORM_HOME && chmod u+x /home/storm/entrypoint.sh
+RUN ln -fs /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 # Add VOLUMEs to allow backup of config and logs
 VOLUME ["/usr/share/apache-storm/conf","/var/log/storm"]
