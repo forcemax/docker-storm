@@ -2,8 +2,9 @@
 # A minimal Makefile for deploying a Storm cluster using Docker containers.
 #
 # Authors: Florian Hussonnois <florian.hussonnois_gmail.com>
+# Authors: Jae-cheol Kim <forcemax_gmail.com>
 #
-STORM_IMAGE=fhuz/docker-storm
+STORM_IMAGE=forcemax/docker-storm
 
 all:
 
