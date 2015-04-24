@@ -73,7 +73,7 @@ done
 
 if [ -e "/tmp/storm-zookeeper.cfg" ]; then
     cat $STORM_HOME/conf/storm.yaml | head -n1 > /tmp/storm.yaml
-    cat $STORM_HOME/conf/storm.yaml >> /tmp/storm.yaml
+    cat /tmp/storm-zookeeper.cfg >> /tmp/storm.yaml
     cat $STORM_HOME/conf/storm.yaml | tail -n+3 >> /tmp/storm.yaml 
     cp -f /tmp/storm.yaml $STORM_HOME/conf/storm.yaml
 else
