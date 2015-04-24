@@ -11,11 +11,11 @@ drpc.invocations.port: 3773
 ui.port: %ui_port%
 
 # netty transport
-#storm.messaging.transport: "backtype.storm.messaging.netty.Context"
-#storm.messaging.netty.buffer_size: 16384
-#storm.messaging.netty.max_retries: 10
-#storm.messaging.netty.min_wait_ms: 1000
-#storm.messaging.netty.max_wait_ms: 5000
+storm.messaging.transport: "backtype.storm.messaging.netty.Context"
+storm.messaging.netty.buffer_size: 16384
+storm.messaging.netty.max_retries: 10
+storm.messaging.netty.min_wait_ms: 1000
+storm.messaging.netty.max_wait_ms: 5000
 
 nimbus.childopts: "-Xmx1024m -Djava.net.preferIPv4Stack=true"
 ui.childopts: "-Xmx768m -Djava.net.preferIPv4Stack=true"
@@ -25,5 +25,5 @@ worker.childopts: "-Xmx6g -Djava.net.preferIPv4Stack=true"
 supervisor.slots.ports:
     - 6700
     - 6701
-    - 6703
+    - 6702
 
