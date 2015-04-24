@@ -62,7 +62,24 @@ if [ ! -z "$ZK_PORT_2181_TCP_ADDR" ]; then
   export ZOOKEEPER_ADDR=$ZK_PORT_2181_TCP_ADDR;
 fi
 
-sed -i s/%zookeeper%/$ZOOKEEPER_ADDR/g $STORM_HOME/conf/storm.yaml
+for VAR in `env`
+do
+  if [[ $VAR =~ ^ZOOKEEPER_SERVER_[0-9]+= ]]; then
+    SERVER_ID=`echo "$VAR" | sed -r "s/ZOOKEEPER_SERVER_(.*)=.*/\1/"`
+    SERVER_IP=`echo "$VAR" | sed 's/.*=//'`
+    echo "    - "${SERVER_IP}" >> /tmp/storm-zookeeper.cfg
+  fi
+done
+
+if [ -e "/tmp/storm-zookeeper.cfg" ]; then
+    cat $STORM_HOME/conf/storm.yaml | head -n1 > /tmp/storm.yaml
+    cat $STORM_HOME/conf/storm.yaml >> /tmp/storm.yaml
+    cat $STORM_HOME/conf/storm.yaml | tail -n+3 >> /tmp/storm.yaml 
+    cp -f /tmp/storm.yaml $STORM_HOME/conf/storm.yaml
+else
+    sed -i s/%zookeeper%/$ZOOKEEPER_ADDR/g $STORM_HOME/conf/storm.yaml
+fi
+
 sed -i s/%nimbus%/$NIMBUS_ADDR/g $STORM_HOME/conf/storm.yaml
 sed -i s/%ui_port%/$UI_PORT/g $STORM_HOME/conf/storm.yaml
 

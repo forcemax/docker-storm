@@ -1,15 +1,15 @@
 nimbus:
   command: --daemon nimbus drpc
-  image: fhuz/docker-storm
+  image: forcemax/docker-storm
   ports:
     - "3773:3773"
     - "3772:3772"
     - "6627:6627"
   external_links:
-    - storm_zookeeper_1:zk
+    - zookeeper_1:zk
 supervisor:
   command: --daemon supervisor logviewer
-  image: fhuz/docker-storm
+  image: forcemax/docker-storm
   ports:
     - "8000:8000"
     - "6700:6700"
@@ -19,13 +19,13 @@ supervisor:
   links:
     - nimbus:nimbus
   external_links:
-    - storm_zookeeper_1:zk
+    - zookeeper_1:zk
 ui:
   command: --daemon ui
-  image: fhuz/docker-storm
+  image: forcemax/docker-storm
   ports:
     - "8080:8080"
   links:
     - nimbus:nimbus
   external_links:
-    - storm_zookeeper_1:zk
+    - zookeeper_1:zk
