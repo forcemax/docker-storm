@@ -67,7 +67,7 @@ do
   if [[ $VAR =~ ^ZOOKEEPER_SERVER_[0-9]+= ]]; then
     SERVER_ID=`echo "$VAR" | sed -r "s/ZOOKEEPER_SERVER_(.*)=.*/\1/"`
     SERVER_IP=`echo "$VAR" | sed 's/.*=//'`
-    echo "    - "${SERVER_IP}" >> /tmp/storm-zookeeper.cfg
+    echo "    - \"${SERVER_IP}\"" >> /tmp/storm-zookeeper.cfg
   fi
 done
 
