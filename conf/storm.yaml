@@ -25,4 +25,3 @@ worker.childopts: "-Xmx6g -Djava.net.preferIPv4Stack=true"
 supervisor.slots.ports:
     - 6700
     - 6701
-
