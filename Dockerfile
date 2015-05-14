@@ -47,6 +47,11 @@ ADD supervisor/storm-daemon.conf /home/storm/storm-daemon.conf
 RUN chown -R storm:storm $STORM_HOME && chmod u+x /home/storm/entrypoint.sh
 RUN ln -fs /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
+# Set the locale
+RUN locale-gen ko_KR.UTF-8  
+ENV LANG ko_KR.UTF-8  
+ENV LC_ALL ko_KR.UTF-8
+
 # Add VOLUMEs to allow backup of config and logs
 VOLUME ["/usr/share/apache-storm/conf","/var/log/storm"]
 
