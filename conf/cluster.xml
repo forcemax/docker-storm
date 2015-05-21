@@ -34,6 +34,25 @@
     </encoder>
  </appender>
 
+  <appender name="EVENTTRACER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/var/log/storm/eventTracer.log</file>
+    <append>true</append>
+    <filter class="com.kt.iot.core.util.EventTracerFilter" />
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>/var/log/storm/eventTracer.log.%i</fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>9</maxIndex>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>100MB</maxFileSize>
+    </triggeringPolicy>
+    <encoder>
+      <pattern>
+        %d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+
  <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>/var/log/storm/access.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
@@ -80,6 +99,11 @@
   <logger name="backtype.storm.metric.LoggingMetricsConsumer" additivity="false" >
     <level value="INFO"/>
     <appender-ref ref="METRICS"/>
+  </logger>
+
+  <logger name="com.kt.iot.core" additivity="false">
+    <level value="INFO"/>
+    <appender-ref ref="EVENTTRACER"/>
   </logger>
 
 </configuration>
