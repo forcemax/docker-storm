@@ -87,6 +87,8 @@
     </encoder>
   </appender>
 
+  <logger name="storm.kafka" level="ERROR"/>
+
   <root level="INFO">
     <appender-ref ref="A1"/>
   </root>
