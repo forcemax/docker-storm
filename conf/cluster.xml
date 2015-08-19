@@ -105,7 +105,7 @@
 
   <logger name="com.kt.iot.core" additivity="false">
     <level value="INFO"/>
-    <appender-ref ref="EVENTTRACER"/>
+    <appender-ref ref="A1"/>
   </logger>
 
 </configuration>

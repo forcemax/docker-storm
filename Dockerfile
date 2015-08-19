@@ -45,7 +45,10 @@ ADD script/entrypoint.sh /home/storm/entrypoint.sh
 ADD supervisor/storm-daemon.conf /home/storm/storm-daemon.conf
 
 RUN chown -R storm:storm $STORM_HOME && chmod u+x /home/storm/entrypoint.sh
+
+# Set the timezone
 RUN ln -fs /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+RUN echo Asia/Seoul > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
 # Set the locale
 RUN locale-gen ko_KR.UTF-8  
