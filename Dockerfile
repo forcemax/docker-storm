@@ -1,4 +1,4 @@
-# apache-storm-0.9.5
+# apache-storm-0.9.6
 #
 # VERSION      1.0
 
@@ -23,7 +23,7 @@ RUN apt-get install -y oracle-java8-installer
 RUN apt-get install -y supervisor wget tar 
 RUN echo [supervisord] | tee -a /etc/supervisor/supervisord.conf ; echo nodaemon=true | tee -a /etc/supervisor/supervisord.conf
 
-ENV STORM_VERSION 0.9.5
+ENV STORM_VERSION 0.9.6
 
 # Create storm group and user
 ENV STORM_HOME /usr/share/apache-storm
@@ -31,7 +31,7 @@ ENV STORM_HOME /usr/share/apache-storm
 RUN groupadd storm; useradd --gid storm --home-dir /home/storm --create-home --shell /bin/bash storm
 
 # Download and Install Apache Storm
-RUN wget http://apache.mirrors.ovh.net/ftp.apache.org/dist/storm/apache-storm-$STORM_VERSION/apache-storm-$STORM_VERSION.tar.gz && \
+RUN wget http://apache.tt.co.kr/storm/apache-storm-$STORM_VERSION/apache-storm-$STORM_VERSION.tar.gz && \
 tar -xzvf apache-storm-$STORM_VERSION.tar.gz -C /usr/share && mv $STORM_HOME-$STORM_VERSION $STORM_HOME && \
 rm -rf apache-storm-$STORM_VERSION.tar.gz
 
